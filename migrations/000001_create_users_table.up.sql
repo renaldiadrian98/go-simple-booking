@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users(
 );
 ALTER TABLE users ADD CONSTRAINT fk_users_user_roles FOREIGN KEY (user_role_id) REFERENCES user_roles (id);
 
+
 CREATE TABLE IF NOT EXISTS hotels(
     "id" BIGSERIAL PRIMARY KEY NOT NULl,
     "user_id" INTEGER REFERENCES users (id),

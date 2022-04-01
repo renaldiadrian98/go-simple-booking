@@ -3,6 +3,7 @@ package middlewares
 import (
 	"os"
 	"strings"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -38,6 +39,17 @@ func MiddlewareToken(c *gin.Context) {
 	}
 
 	for key, val := range claims {
+		// Check expire token
+		if key == "expire" {
+			if time.Now().Unix() == val {
+				c.AbortWithStatusJSON(401, gin.H{
+					"success": false,
+					"message": err.Error(),
+					"data":    nil,
+				})
+				return
+			}
+		}
 		if key == "user_id" {
 			c.Set("userId", val)
 		}

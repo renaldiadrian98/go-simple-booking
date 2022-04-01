@@ -39,7 +39,5 @@ func SetupServer() *gin.Engine {
 	r.POST("/api/transaction", middlewares.MiddlewareToken, controllers.TransactionStore)
 	r.POST("/api/transaction/callback", middlewares.MiddlewareToken, controllers.TransactionUpdate)
 
-	// HomePage
-	r.GET("/", controllers.HomeGet)
 	return r
 }
