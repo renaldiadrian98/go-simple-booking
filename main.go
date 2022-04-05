@@ -18,6 +18,10 @@ func SetupServer() *gin.Engine {
 	r := gin.Default()
 	models.Connect()
 
+	// Set views folder
+	r.LoadHTMLGlob("views/*")
+	r.GET("/", controllers.IndexHomePage)
+
 	// Authentication
 	r.POST("/api/register", controllers.AuthRegister)
 	r.POST("/api/login", controllers.AuthLogin)

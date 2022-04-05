@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"go-simple-booking/helpers"
 	"go-simple-booking/models"
 
@@ -10,7 +9,42 @@ import (
 
 func TransactionGet(c *gin.Context) {
 	userIdInt := helpers.HelpersGetUserIdInt(c)
-	fmt.Println(userIdInt)
+	page, err := helpers.HelpersPageQueryToInt(c.Query("page"))
+	if err != nil {
+		c.AbortWithStatusJSON(500, gin.H{
+			"success": false,
+			"message": err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	transaction, err := models.TransactionGet(page, userIdInt)
+	if err != nil {
+		c.AbortWithStatusJSON(500, gin.H{
+			"success": false,
+			"message": err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	paginationData, err := models.HelpersPaginationData(page, "transactions")
+	if err != nil {
+		c.AbortWithStatusJSON(500, gin.H{
+			"success": false,
+			"message": err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"success":         true,
+		"message":         "success",
+		"data":            transaction,
+		"pagination_data": paginationData,
+	})
 	return
 }
 

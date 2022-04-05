@@ -32,7 +32,8 @@ func HelpersPageQueryToInt(pageStr string) (int, error) {
 		}
 	}
 
-	return pageInt, nil
+	// if pageStr == ""
+	return 1, nil
 }
 
 func HelpersGetUserIdInt(c *gin.Context) int {
