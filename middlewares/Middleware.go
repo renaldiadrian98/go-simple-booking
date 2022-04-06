@@ -1,7 +1,9 @@
 package middlewares
 
 import (
+	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -22,57 +24,19 @@ func middlewareParseToken(authHeader string) (jwt.MapClaims, error) {
 }
 
 func MiddlewareManagerOnly(c *gin.Context) {
-	authHeader := c.GetHeader("Authorization")
-	if authHeader == "" {
+	roleId := c.MustGet("role_id")
+	roleIdrStr := fmt.Sprint(roleId)
+	roleIdInt, _ := strconv.Atoi(roleIdrStr)
+	fmt.Println(roleIdInt)
+	if roleIdInt != 1 {
 		c.AbortWithStatusJSON(403, gin.H{
 			"success": false,
-			"message": "No Authorization Header",
+			"message": "Unauthorized",
 			"data":    nil,
 		})
 		return
 	}
-	claims, err := middlewareParseToken(authHeader)
-	if err != nil {
-		c.AbortWithStatusJSON(500, gin.H{
-			"success": false,
-			"message": err.Error(),
-			"data":    nil,
-		})
-		return
-	}
-
-	for key, val := range claims {
-		// Check expire token
-		if key == "expire" {
-			if time.Now().Unix() == val {
-				c.AbortWithStatusJSON(401, gin.H{
-					"success": false,
-					"message": err.Error(),
-					"data":    nil,
-				})
-				return
-			}
-		}
-		if key == "user_id" {
-			c.Set("userId", val)
-		}
-		if key == "email" {
-			c.Set("email", val)
-		}
-		if key == "role_id" && val == 1 {
-			c.Set("role_id", val)
-		} else {
-			c.AbortWithStatusJSON(403, gin.H{
-				"success": false,
-				"message": "Unauthorized",
-				"data":    nil,
-			})
-			return
-		}
-	}
-
 	c.Next()
-
 }
 
 func MiddlewareToken(c *gin.Context) {
