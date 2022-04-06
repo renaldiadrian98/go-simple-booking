@@ -1,22 +1,21 @@
 package models
 
 import (
-	"database/sql"
 	"go-simple-booking/helpers"
 	"time"
 )
 
 type Transaction struct {
-	ID           int          `json:"id" gorm:"primary_key"`
-	UserId       int          `json:"user_id"`
-	IsPaid       bool         `json:"is_paid"`
-	HotelRoomId  int          `json:"hotel_room_id"`
-	PaidPrice    int          `json:"paid_price"`
-	PaidAt       sql.NullTime `json:"paid_at"`
-	CheckinDate  time.Time    `json:"checkin_date"`
-	CheckoutDate time.Time    `json:"checkout_date"`
-	CreatedAt    time.Time    `json:"created_at"`
-	UpdatedAt    time.Time    `json:"updated_at"`
+	ID           int       `json:"id" gorm:"primary_key"`
+	UserId       int       `json:"user_id"`
+	IsPaid       bool      `json:"is_paid"`
+	HotelRoomId  int       `json:"hotel_room_id"`
+	PaidPrice    int       `json:"paid_price"`
+	PaidAt       time.Time `json:"paid_at"`
+	CheckinDate  time.Time `json:"checkin_date"`
+	CheckoutDate time.Time `json:"checkout_date"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
 }
 
 func TransactionGet(page int, userId int) ([]Transaction, error) {
