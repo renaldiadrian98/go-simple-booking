@@ -26,9 +26,6 @@ func SetupServer() *gin.Engine {
 	r.POST("/api/register", controllers.AuthRegister)
 	r.POST("/api/login", controllers.AuthLogin)
 
-	// Middleware test
-	r.GET("/api/middleware", middlewares.MiddlewareToken)
-
 	// Hotel
 	r.GET("/api/hotel", controllers.HotelGet)
 	r.POST("/api/hotel", middlewares.MiddlewareToken, middlewares.MiddlewareManagerOnly, controllers.HotelStore)
