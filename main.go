@@ -32,7 +32,7 @@ func SetupServer() *gin.Engine {
 	r.PATCH("/api/hotel/:hotel_id", middlewares.MiddlewareToken, middlewares.MiddlewareManagerOnly, controllers.HotelUpdate)
 
 	// Hotel Type
-	r.POST("/api/hotel_type", middlewares.MiddlewareToken, controllers.HotelTypeStore)
+	r.POST("/api/hotel_type", middlewares.MiddlewareToken, middlewares.MiddlewareManagerOnly, controllers.HotelTypeStore)
 	r.GET("/api/hotel_type", controllers.HotelTypeGet)
 
 	// Transaction
