@@ -48,7 +48,7 @@ func TransactionCheckAvailability(hotel_room_id int, checkin_date string, checko
 		(T.checkin_date BETWEEN ? AND ?)
 		AND
 		(T.checkout_date BETWEEN ? AND ?)
-		AND
+		AND 
 		T.is_paid = true
 	`, hotel_room_id, checkin_date, checkout_date, checkin_date, checkout_date).Scan(&transaction).Error
 	if err != nil || len(transaction) == 0 {
