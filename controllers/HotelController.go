@@ -3,6 +3,7 @@ package controllers
 import (
 	"go-simple-booking/helpers"
 	"go-simple-booking/models"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -59,7 +60,34 @@ func HotelUpdate(c *gin.Context) {
 		return
 	}
 
+	hotelId, err := strconv.Atoi(c.Param("hotel_id"))
+	if err != nil {
+		c.AbortWithStatusJSON(500, gin.H{
+			"success": false,
+			"message": err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	userIdInt := helpers.HelpersGetUserIdInt(c)
+
 	// Update hotel
+	hotel, err := models.HotelUpdate(hotelId, input.Name, userIdInt)
+	if err != nil {
+		c.AbortWithStatusJSON(500, gin.H{
+			"success": false,
+			"message": err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+	c.JSON(200, gin.H{
+		"success": true,
+		"message": "success",
+		"data":    hotel,
+	})
+	return
 
 }
 

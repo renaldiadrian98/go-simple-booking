@@ -37,11 +37,19 @@ func HotelGet(page int) ([]Hotel, error) {
 	return hotel, nil
 }
 
-// func HotelUpdate(hotelId int, name string, userId int) (Hotel, error) {
-// 	var hotel Hotel
-// 	err := DB.Raw(`
+func HotelUpdate(hotelId int, name string, userId int) (Hotel, error) {
+	var hotel Hotel
+	err := DB.Raw(`
+		UPDATE hotels
+		SET name = ?
+		WHERE id = ?
+		AND
+		user_id = ?
+		RETURNING *
+	`, name, hotelId, userId).Scan(&hotel).Error
+	if err != nil {
+		return hotel, err
+	}
+	return hotel, nil
 
-// 	`)
-// 	return hotel, err
-
-// }
+}
