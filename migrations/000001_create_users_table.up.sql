@@ -1,12 +1,24 @@
+CREATE TABLE IF NOT EXISTS roles(
+    "id" BIGSERIAL PRIMARY KEY NOT NULl,
+    "name" VARCHAR(255) NOT NULL,
+    "created_at" timestamp(0) without time zone null, 
+    "updated_at" timestamp(0) without time zone null
+);
+
 CREATE TABLE IF NOT EXISTS users(
     "id" BIGSERIAL PRIMARY KEY NOT NULl,
     "password" VARCHAR (255) NOT NULL,
     "email" VARCHAR (255) UNIQUE NOT NULL,
-    "user_role_id" INTEGER REFERENCES user_roles (id),
+    "role_id" INTEGER REFERENCES roles (id),
     "created_at" timestamp(0) without time zone null, 
     "updated_at" timestamp(0) without time zone null
 );
-ALTER TABLE users ADD CONSTRAINT fk_users_user_roles FOREIGN KEY (user_role_id) REFERENCES user_roles (id);
+ALTER TABLE users ADD CONSTRAINT fk_users_roles FOREIGN KEY (role_id) REFERENCES roles (id);
+
+INSERT INTO roles (id, name, created_at, updated_at)
+VALUES(1, 'Manager', current_timestamp, current_timestamp);
+INSERT INTO roles (id, name, created_at, updated_at)
+VALUES(2, 'User', current_timestamp, current_timestamp);
 
 
 CREATE TABLE IF NOT EXISTS hotels(
@@ -53,9 +65,3 @@ CREATE TABLE IF NOT EXISTS transactions(
 ALTER TABLE transactions ADD CONSTRAINT fk_transactions_hotel_rooms FOREIGN KEY (hotel_room_id) REFERENCES hotel_rooms (id);
 ALTER TABLE transactions ADD CONSTRAINT fk_transactions_users FOREIGN KEY (user_id) REFERENCES users (id);
 
-CREATE TABLE IF NOT EXISTS user_roles(
-    "id" BIGSERIAL PRIMARY KEY NOT NULl,
-    "name" VARCHAR(255) NOT NULL,
-    "created_at" timestamp(0) without time zone null, 
-    "updated_at" timestamp(0) without time zone null
-);

@@ -44,7 +44,7 @@ func AuthLogin(c *gin.Context) {
 		return
 	}
 
-	token, err := helpers.GenerateToken(user.ID, user.Email)
+	token, err := helpers.GenerateToken(user.ID, user.Email, user.RoleId)
 
 	// Fill response
 	var userResponse responses.User
@@ -60,9 +60,13 @@ func AuthLogin(c *gin.Context) {
 }
 
 func AuthRegister(c *gin.Context) {
-	var input struct {
+	var input = struct {
 		Email    string `json:"email" binding:"required"`
 		Password string `json:"password" binding:"required"`
+		RoleId   int    `json:"role_id"`
+	}{
+		// Default value of struct attribute
+		RoleId: 2,
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -99,10 +103,19 @@ func AuthRegister(c *gin.Context) {
 	var user models.User
 	user.Email = input.Email
 	user.Password = string(pass)
-	models.DB.Save(&user)
+	user.RoleId = input.RoleId
+	errSave := models.DB.Save(&user).Error
+	if errSave != nil {
+		c.AbortWithStatusJSON(500, gin.H{
+			"success": true,
+			"message": errSave.Error(),
+			"data":    nil,
+		})
+		return
+	}
 
 	// Generate token
-	token, err := helpers.GenerateToken(user.ID, user.Email)
+	token, err := helpers.GenerateToken(user.ID, user.Email, user.RoleId)
 
 	var userResponse responses.User
 	userResponse.Email = user.Email

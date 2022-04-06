@@ -6,6 +6,17 @@ type User struct {
 	ID        int       `json:"id" gorm:"primary_key"`
 	Email     string    `json:"email"`
 	Password  string    `json:"password"`
+	RoleId    int       `json:"role_id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type UserWithRelation struct {
+	ID        int       `json:"id" gorm:"primary_key"`
+	Email     string    `json:"email"`
+	Password  string    `json:"password"`
+	RoleId    int       `json:"role_id"`
+	Role      Role      `json:"role"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }

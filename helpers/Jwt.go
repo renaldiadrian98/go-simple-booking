@@ -7,7 +7,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func GenerateToken(userid int, email string) (string, error) {
+func GenerateToken(userid int, email string, roleId int) (string, error) {
 	var err error
 
 	// Creating Access Token
@@ -15,6 +15,7 @@ func GenerateToken(userid int, email string) (string, error) {
 	atClaims := jwt.MapClaims{}
 	atClaims["user_id"] = userid
 	atClaims["email"] = email
+	atClaims["role_id"] = roleId
 	atClaims["expire"] = time.Now().Add(time.Hour * 24).Unix()
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
 	token, err := at.SignedString([]byte(secretKey))
