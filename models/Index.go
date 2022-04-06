@@ -25,7 +25,11 @@ func Connect() {
 	dbName := os.Getenv("DB_NAME")
 	dbPort := os.Getenv("DB_PORT")
 
-	dataSourceName := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, dbUserName, dbPassword, dbName)
+	// START: dataSourceName for heroku
+	dataSourceName := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s", dbHost, dbPort, dbUserName, dbPassword, dbName)
+	// END: dataSourceName for heroku
+	// dataSourceName := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, dbUserName, dbPassword, dbName)
+
 	// fmt.Println(dataSourceName)
 	db, err := gorm.Open("postgres", dataSourceName)
 
