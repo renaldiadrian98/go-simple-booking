@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/jinzhu/gorm"
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -13,10 +14,10 @@ var DB *gorm.DB
 
 func Connect() {
 	// START: Comment for heroku
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	panic(err.Error())
-	// }
+	err := godotenv.Load()
+	if err != nil {
+		panic(err.Error())
+	}
 	// END: Comment for heroku
 
 	dbUserName := os.Getenv("DB_USER")
@@ -26,9 +27,9 @@ func Connect() {
 	dbPort := os.Getenv("DB_PORT")
 
 	// START: dataSourceName for heroku
-	dataSourceName := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s", dbHost, dbPort, dbUserName, dbPassword, dbName)
+	// dataSourceName := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s", dbHost, dbPort, dbUserName, dbPassword, dbName)
 	// END: dataSourceName for heroku
-	// dataSourceName := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, dbUserName, dbPassword, dbName)
+	dataSourceName := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, dbUserName, dbPassword, dbName)
 
 	// fmt.Println(dataSourceName)
 	db, err := gorm.Open("postgres", dataSourceName)
